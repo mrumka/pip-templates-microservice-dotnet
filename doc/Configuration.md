@@ -48,7 +48,7 @@ Example **config.yml** file:
   route: status
 ```
 
-To enable mongodb support please declare environment varibales MONGO_ENABLED, MONGO_COLLECTION, MONGO_DB, MONGO_USER and MONGO_PASS variables:
+To enable mongodb support should be declared following environment varibales MONGO_ENABLED, MONGO_COLLECTION, MONGO_DB, MONGO_USER and MONGO_PASS variables:
 
 ```bash
 export MONGO_ENABLED=True
@@ -58,7 +58,7 @@ export MONGO_USER=SomeUser
 export MONGO_PASS=SomeUserPassword
 ```
 
-To enable elastic search please add or uncomment following line and declare ELASTIC_SEARCH_SERVICE_URI environment variable:
+To enable elastic search should be added or uncommented following line and declare ELASTIC_SEARCH_SERVICE_URI environment variable:
 
 ```bash
 export ELASTIC_SEARCH_SERVICE_URI=https://CLUSTER_ID.REGION.PLATFORM.found.io:9243
@@ -73,7 +73,7 @@ Example **config.yml** file:
 
 ```
 
-To enable prometheus support please add or uncomment following line:
+To enable prometheus support should be added or uncommented following line:
 
 Example **config.yml** file:
 ```
