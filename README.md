@@ -100,11 +100,11 @@ curl --header "Content-Type: application/json" --request POST --data "{\"correla
 curl --header "Content-Type: application/json" --request POST --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon\":{\"id\":\"2\", \"site_id\":\"Site2\", \"type\":\"tracker\",\"udi\":\"12345\", \"label\":\"basic tracker\", \"radius\":4.0, \"center\": {\"type\": \"absolute\", \"coordinates\": [123.0,456.0,789.0]}}}" http://localhost:8080/v1/beacons/create_beacon
 ```
 
-Retrieve list of beacons
+Get all beacons
 ```bash
 curl --header "Content-Type: application/json" --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"filter\":null,\"paging\":null}" --request POST localhost:8080/v1/beacons/get_beacons
 ```
-Update beacons
+Update beacon
 ```bash
 curl --header "Content-Type: application/json" --request POST --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon\":{\"id\":\"2\", \"site_id\":\"New Site2\", \"type\":\"tracker\",\"udi\":\"12345\", \"label\":\"basic tracker\", \"radius\":4.0, \"center\": {\"type\": \"absolute\", \"coordinates\": [123.0,456.0,789.0]}}}" http://localhost:8080/v1/beacons/update_beacon
 ```
