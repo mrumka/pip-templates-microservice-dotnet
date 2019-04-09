@@ -72,24 +72,18 @@ More information about how to configure microservice and run in docker container
 Prerequisite:
 * Download and install [.Net Core SDK](https://dotnet.microsoft.com/download).
 * Download and install [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/) or [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/).
-* Download and install [MongoDB](https://www.mongodb.com/) to use over than Memory and File persistence.
 
-Check it latest source code directly from github repository
+Check it out latest source code directly from github repository
 ```bash
 git clone git@github.com:pip-templates/pip-templates-microservice-dotnet.git
 ```
 
-Install
+Compile and run source code 
 ```bash
-git clone git@github.com:pip-templates/pip-templates-microservice-dotnet.git
+dotnet build ./pip-samples-beacons.sln
+cd ./src
+dotnet ./Process/bin/Debug/netcoreapp2.1/run.dll
 ```
-
-Copy microservice **config.yml** file from ./config/config.yml to the ./src/config/config.yml folder and set configuration parameters.
-For more information on the microservice configuration see [Configuration Guide](Configuration.md).
-
-* Open pip-samples-beacons.sln in Visual Studio
-* Check that Process selected as default project
-* Click Run -> Start Without Debigging menu
 
 ## Use
 
