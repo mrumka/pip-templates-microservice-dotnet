@@ -1,22 +1,16 @@
 ﻿# Pip Sample Beacons Application
 
-A simple Pip Sample Beacons application that serves two purposes:
-- It is used as the default app template when creating new projects
-- It is a reference for building and publishing custom PIP Templates
+A simple Pip Sample Beacons Application that serves two purposes:
+- It can be used as the template when creating new projects
+- It is a reference for building and publishing custom microservices
 
-This template has dependencies to the: 
-* <a href="https://github.com/pip-services/pip-services-commons-dotnet">Pip Commons</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-components-dotnet">Pip Components</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-container-dotnet">Pip Container</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-data-dotnet">Pip Data</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-rpc-dotnet">Pip MongoDb</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-mongodb-dotnet">Pip Rpc</a>
+The microservice contains list of beacons where each becaon have basic information and absolute location.
 
 The microservice currently supports the following deployment options:
-* Deployment platforms: Standalone Process, Seneca
-* External APIs: HTTP/REST, Seneca
-* Persistence: Flat Files, MongoDB
-
+* Deployment platforms: Standalone Process, Docker
+* External APIs: HTTP/REST
+* Persistence: Memory, Flat Files, MongoDB
+* Logging, Maintaining
 
 <a name="links"></a> Quick Links:
 * [Download Links](doc/Downloads.md)
@@ -24,18 +18,16 @@ The microservice currently supports the following deployment options:
 * [Configuration Guide](doc/Configuration.md)
 * [Deployment Guide](doc/Deployment.md)
 * Client SDKs
-  - [Node.js SDK](https://github.com/pip-services-infrastructure/pip-clients-settings-dotnet)
+  - [.Net Core SDK](https://github.com/pip-services-infrastructure/pip-clients-settings-dotnet)
 * Communication Protocols
-  - [HTTP Version 1](doc/HttpProtocolV1.md)
-  - [Seneca Version 1](doc/SenecaProtocolV1.md)
+  - [HTTP Version 1](doc/HttpProtocolV1.md)  
   
-  
- ## Contract
+ ## Microservice Interface
 
-Logical contract of the microservice is presented below and define in Interface project. For physical implementation (HTTP/REST, Thrift, Seneca, Lambda, etc.),
+Logical contract of the microservice is presented below and define in Interface project. For physical implementation (HTTP/REST, Lambda, etc.),
 please, refer to documentation of the specific protocol.
 
-```dotnet
+```c#
     public class BeaconV1 : IStringIdentifiable
     {
         public string Id { get; set; }
@@ -47,14 +39,13 @@ please, refer to documentation of the specific protocol.
         public double Radius { get; set; }
     }
     
-    [DataContract]
     public class CenterObjectV1
     {
         public string Type { get; set; }
         public double[] Coordinates { get; set; }
     }
     
-    public interface IBeaconsController
+    public interface IBeaconsClientV1
     {
         Task<DataPage<BeaconV1>> GetBeaconsAsync(string correlationId, FilterParams filter, PagingParams paging);
         Task<BeaconV1> GetBeaconByIdAsync(string correlationId, string id);
@@ -66,95 +57,67 @@ please, refer to documentation of the specific protocol.
     }
 ```
 
-## Download
+## Run from Docker
 
-Right now the only way to get the microservice is to check it out directly from github repository
+Install [Docker Desctop](https://www.docker.com/)
+
+Execute following command to download Docker image with predefined microservice and run
+```bash
+git docker run pip-templates-microservice-dotnet
+```
+More information about how to configure microservice and run in docker container can be found in [Deployment Guide](doc/Deployment.md)
+
+## Run from source code
+
+Prerequisite:
+* Download and install [.Net Core SDK](https://dotnet.microsoft.com/download).
+* Download and install [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/) or [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/).
+* Download and install [MongoDB](https://www.mongodb.com/) to use over than Memory and File persistence.
+
+Check it latest source code directly from github repository
 ```bash
 git clone git@github.com:pip-templates/pip-templates-microservice-dotnet.git
 ```
 
-Pip.Service team is working to implement packaging and make stable releases available for your 
-as zip downloadable archieves.
-
-## Run
-
-Add **config.yml** file to the root of the microservice folder and set configuration parameters.
-As the starting point you can use example configuration from **config.example.yml** file. 
-
-Example of microservice configuration
-```yaml
-# Console logger
-- descriptor: "pip-services3-commons:logger:console:default:1.0"
-  level: "trace"
-  
-# Performance counters that posts values to log
-- descriptor: "pip-services3-commons:counters:log:default:1.0"
-  level: "trace"
-
-# # Elastic search logger vesion 1.0
-# - descriptor: "pip-services:logger:elasticsearch:default:1.0"
-#   connection:
-#     uri: {{ELASTIC_SEARCH_SERVICE_URI}}{{^ELASTIC_SEARCH_SERVICE_URI}}http://localhost:9200{{/ELASTIC_SEARCH_SERVICE_URI}}
-
-{{#if MONGO_ENABLED}}
-# MongoDB Persistence
-- descriptor: "beacons:persistence:mongodb:default:1.0"
-  collection: {{MONGO_COLLECTION}}{{^MONGO_COLLECTION}}beacons{{/MONGO_COLLECTION}}
-  connection:
-    uri: {{MONGO_SERVICE_URI}}
-    host: {{MONGO_SERVICE_HOST}}{{^MONGO_SERVICE_HOST}}localhost{{/MONGO_SERVICE_HOST}}
-    port: {{MONGO_SERVICE_PORT}}{{^MONGO_SERVICE_PORT}}27017{{/MONGO_SERVICE_PORT}}
-    database: {{MONGO_DB}}{{^MONGO_DB}}app{{/MONGO_DB}}
-  credential:
-    username: {{MONGO_USER}}
-    password: {{MONGO_PASS}}
-{{/if}}
-
-{{^MOCK_ENABLED}}{{^MONGO_ENABLED}}
-# Default in-memory persistence
-- descriptor: "beacons:persistence:memory:default:1.0"
-{{/MONGO_ENABLED}}{{/MOCK_ENABLED}}
-
-# Default controller
-- descriptor: "beacons:controller:default:default:1.0"
-
-# Common HTTP endpoint
-- descriptor: "pip-services3:endpoint:http:default:1.0"
-  connection:
-    protocol: "http"
-    host: "0.0.0.0"
-    port: {{{HTTP_PORT}}}{{^HTTP_PORT}}8080{{/HTTP_PORT}}
-
-# HTTP service version 1.0
-- descriptor: "beacons:service:http:default:1.0"
-
-# Heartbeat service
-- descriptor: "pip-services3:heartbeat-service:http:default:1.0"
-  route: heartbeat
-
-# Status service
-- descriptor: "pip-services3:status-service:http:default:1.0"
-  route: status
-
-# Prometheus accounts service
-#- descriptor: "pip-services:metrics-service:prometheus:default:1.0"
+Install
+```bash
+git clone git@github.com:pip-templates/pip-templates-microservice-dotnet.git
 ```
 
+Copy microservice **config.yml** file from ./config/config.yml to the ./src/config/config.yml folder and set configuration parameters.
 For more information on the microservice configuration see [Configuration Guide](Configuration.md).
 
-Start the microservice using the command:
-```bash
-node run
-```
+* Open pip-samples-beacons.sln in Visual Studio
+* Check that Process selected as default project
+* Click Run -> Start Without Debigging menu
 
 ## Use
 
-The easiest way to work with the microservice is to use client SDK. 
-The complete list of available client SDKs for different languages is listed in the [Quick Links](#links)
+Add beacons
+```bash
+curl --header "Content-Type: application/json" --request POST --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon\":{\"id\":\"1\", \"site_id\":\"Site1\", \"type\":\"tracker\",\"udi\":\"12345\", \"label\":\"basic tracker\", \"radius\":4.0, \"center\": {\"type\": \"absolute\", \"coordinates\": [123.0,456.0,789.0]}}}" http://localhost:8080/v1/beacons/create_beacon
 
-* Change Microservice Contract and reflect changes dependent classes.
+curl --header "Content-Type: application/json" --request POST --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon\":{\"id\":\"2\", \"site_id\":\"Site2\", \"type\":\"tracker\",\"udi\":\"12345\", \"label\":\"basic tracker\", \"radius\":4.0, \"center\": {\"type\": \"absolute\", \"coordinates\": [123.0,456.0,789.0]}}}" http://localhost:8080/v1/beacons/create_beacon
+```
 
+Retrieve list of beacons
+```bash
+curl --header "Content-Type: application/json" --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"filter\":null,\"paging\":null}" --request POST localhost:8080/v1/beacons/get_beacons
+```
+Update beacons
+```bash
+curl --header "Content-Type: application/json" --request POST --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon\":{\"id\":\"2\", \"site_id\":\"New Site2\", \"type\":\"tracker\",\"udi\":\"12345\", \"label\":\"basic tracker\", \"radius\":4.0, \"center\": {\"type\": \"absolute\", \"coordinates\": [123.0,456.0,789.0]}}}" http://localhost:8080/v1/beacons/update_beacon
+```
+Get beacon
+```bash
+curl --header "Content-Type: application/json" --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon_id\":\"2\"}" --request POST localhost:8080/v1/beacons/get_beacon_by_id
+```
+
+Delete beacon
+```bash
+curl --header "Content-Type: application/json" --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon_id\":\"2\"}" --request POST localhost:8080/v1/beacons/delete_beacon_by_id
+```
 
 ## Acknowledgements
 
-This microservice was created and currently maintained by *Sergey Seroukhov*.
+This microservice was created and currently maintained by *Sergey Seroukhov*, *Sergey Merkuriev*, *Egor Nuzhnykh*.
