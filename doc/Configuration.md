@@ -5,12 +5,12 @@ Configuration structure used by this module follows the
 structure.
 
 Configuration of Microservice depends on PIP Services and an additional information about how to configure them can be found below:
-* <a href="https://github.com/pip-services/pip-services-commons-dotnet/doc/DConfiguration.ms">Pip Commons</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-components-dotnet/doc/DConfiguration.ms">Pip Components</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-container-dotnet/doc/DConfiguration.ms">Pip Container</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-data-dotnet/doc/DConfiguration.ms">Pip Data</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-rpc-dotnet/doc/DConfiguration.ms">Pip MongoDb</a>
-* <a href="http://github.com/pip-services3-dotnet/pip-services3-mongodb-dotnet/doc/DConfiguration.ms">Pip Rpc</a>
+* <a href="https://github.com/pip-services/pip-services-commons-dotnet/doc/Configuration.ms">Pip Commons</a>
+* <a href="http://github.com/pip-services3-dotnet/pip-services3-components-dotnet/master/doc/Configuration.ms">Pip Components</a>
+* <a href="http://github.com/pip-services3-dotnet/pip-services3-container-dotnet/master/doc/Configuration.ms">Pip Container</a>
+* <a href="http://github.com/pip-services3-dotnet/pip-services3-data-dotnet/master/doc/Configuration.ms">Pip Data</a>
+* <a href="http://github.com/pip-services3-dotnet/pip-services3-mongodb-dotnet/master/doc/Configuration.ms">Pip MongoDb</a>
+* <a href="http://github.com/pip-services3-dotnet/pip-services3-rpc-dotnet/master/doc/Configuration.ms">Pip Rpc</a>
 
 All used PIP Services and their configuration should be declared config.yml file.
 Example **config.yml** file:
@@ -34,7 +34,7 @@ Example **config.yml** file:
   connection:
     protocol: "http"
     host: "0.0.0.0"
-    port: {{{HTTP_PORT}}}{{^HTTP_PORT}}8080{{/HTTP_PORT}}
+    port: 8080
 
 # HTTP service version 1.0
 - descriptor: "beacons:service:http:default:1.0"
@@ -47,31 +47,50 @@ Example **config.yml** file:
 - descriptor: "pip-services3:status-service:http:default:1.0"
   route: status
 ```
+Where 
+* protocol - .Net Framework supports only http
+* host - the IP Address or DNS name of the system in the Network
+* port - the IP Port of the service within the System
 
-To enable mongodb support should be declared following environment varibales MONGO_ENABLED, MONGO_COLLECTION, MONGO_DB, MONGO_USER and MONGO_PASS variables:
 
-```bash
-export MONGO_ENABLED=True
-export MONGO_COLLECTION=BeaconsCollection
-export MONGO_DB=BeaconsDB
-export MONGO_USER=SomeUser
-export MONGO_PASS=SomeUserPassword
-```
-
-To enable elastic search should be added or uncommented following line and declare ELASTIC_SEARCH_SERVICE_URI environment variable:
+To enable mongodb support in-memory persistence should be disabled and should be declared following configuration:
 
 ```bash
-export ELASTIC_SEARCH_SERVICE_URI=https://CLUSTER_ID.REGION.PLATFORM.found.io:9243
+# MongoDB Persistence
+- descriptor: "beacons:persistence:mongodb:default:1.0"
+  collection: beacons
+  connection:
+    uri: {{MONGO_SERVICE_URI}}
+    host: localhost
+    port: 27017
+    database: app
+  credential:
+    username: SomeUser
+    password: SomeUserPassword
 ```
+
+Where
+* collection - Mongo DB collection name
+* uri - ...
+* host - the IP Address or DNS name of the MongoDB server in the Network
+* port - the IP Port MongoDB server on the target System
+* database - the MongoDB database name
+* username - the user name uses to access the database
+* password - the password uses to access the database
+
+To enable elastic search should be added or uncommented following lconfiguration:
 
 Example **config.yml** file:
 ```
 # Elastic search logger vesion 1.0
  - descriptor: "pip-services:logger:elasticsearch:default:1.0"
    connection:
-     uri: {{ELASTIC_SEARCH_SERVICE_URI}}{{^ELASTIC_SEARCH_SERVICE_URI}}http://localhost:9200{{/ELASTIC_SEARCH_SERVICE_URI}}
+     uri: http://localhost:9200
 
 ```
+
+Where uri is Elactic Search connection string
+
 
 To enable prometheus support should be added or uncommented following line:
 
