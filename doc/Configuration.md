@@ -99,4 +99,3 @@ Example **config.yml** file:
 # Prometheus accounts service
 - descriptor: "pip-services:metrics-service:prometheus:default:1.0"
 ```
-

@@ -1,4 +1,4 @@
-﻿# Pip Sample Beacons Application
+# Pip Sample Beacons Application
 
 A simple Pip Sample Beacons Application that serves two purposes:
 - It can be used as the template when creating new projects
@@ -97,7 +97,6 @@ curl --header "Content-Type: application/json" --request POST --data "{\"correla
 
 curl --header "Content-Type: application/json" --request POST --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon\":{\"id\":\"2\", \"site_id\":\"Site2\", \"type\":\"tracker\",\"udi\":\"12345\", \"label\":\"basic tracker\", \"radius\":4.0, \"center\": {\"type\": \"absolute\", \"coordinates\": [123.0,456.0,789.0]}}}" http://localhost:8080/v1/beacons/create_beacon
 ```
-
 Get all beacons
 ```bash
 curl --header "Content-Type: application/json" --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"filter\":null,\"paging\":null}" --request POST localhost:8080/v1/beacons/get_beacons
@@ -110,7 +109,6 @@ Get beacon
 ```bash
 curl --header "Content-Type: application/json" --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon_id\":\"2\"}" --request POST localhost:8080/v1/beacons/get_beacon_by_id
 ```
-
 Delete beacon
 ```bash
 curl --header "Content-Type: application/json" --data "{\"correlationId\":\"d42fd72c-02d2-4944-8631-4d94bc5fd75f\",\"beacon_id\":\"2\"}" --request POST localhost:8080/v1/beacons/delete_beacon_by_id
