@@ -9,5 +9,5 @@ $image="$($component.registry)/$($component.name):$($component.version)-$($compo
 # Set environment variables
 $env:IMAGE = $image
 
-docker-compose -f ./docker/docker-compose.yml up
 docker-compose -f ./docker/docker-compose.yml down
+docker-compose -f ./docker/docker-compose.yml up
