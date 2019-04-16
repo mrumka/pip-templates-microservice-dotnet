@@ -3,7 +3,6 @@
 Tags microservice can be used in different deployment scenarios.
 
 * [Standalone Process](#process)
-* [Seneca Plugin](#seneca)
 
 ## <a name="process"></a> Standalone Process
 
@@ -16,61 +15,57 @@ You can get it from the official site at https://dotnet.microsoft.com/download
 **Step 2.** Add **config.json** file to the root of the microservice folder and set configuration parameters. 
 See [Configuration Guide](Configuration.md) for details.
 
-**Step 3.** Start the microservice using the command:
+**Step 3.** Start the microservice using the commands:
+
+Compile and run source code 
+```bash
+dotnet build ./pip-samples-beacons.sln
+cd ./src
+dotnet ./Process/bin/Debug/netcoreapp2.1/run.dll
+```
+
+## <a name="docker"></a> Docker Container
+
+**Step 1.** Install [Docker Desctop](https://www.docker.com/)
+
+**Step 2.** Install [PowerShell]. One of the ways is using brew package installer:
 
 ```bash
-node run
+brew cask install powershell
 ```
 
-## <a name="seneca"></a> Seneca Plugin
-
-The Tags microservice can also be used as a Seneca plugin.
-To learn more about Seneca microservices framework to go http://senecajs.org
-
-**Step 1.** Include dependency into **package.json** file:
-
-```javascript
-{
-    ...
-    "dependencies": {
-        ....
-        "pip-services-settings-node": "^1.0.0",
-        ...
-    }
-}
+**Step 3.**  Pull docker image, deploy project and compile source code
+```bash
+pwsh build.ps1
 ```
 
-Then install dependencies using **npm**
-
-```javascript
-# Install dependencies
-npm install
-
-# Update existing dependencies
-npm update
+**Step 4.**  Run with in-memory persistent
+```bash
+pwsh run.ps1
 ```
 
-**Step 2.** Load seneca plugin within your code. 
+To enable MongoDB support please declare environment varibales MONGO_ENABLED, MONGO_COLLECTION, MONGO_DB, MONGO_USER and MONGO_PASS variables:
 
-Configuration parameters for the plugin are identical to the microservice configuration.
-See [Configuration Guide](Configuration.md) for details.
+ ```bash
+export MONGO_ENABLED=True
+export MONGO_COLLECTION=BeaconsCollection
+export MONGO_DB=BeaconsDB
+export MONGO_USER=SomeUser
+export MONGO_PASS=SomeUserPassword
+```
 
-```javascript
-var seneca = require('seneca')();
+To enable elastic search please add or uncomment following line and declare ELASTIC_SEARCH_SERVICE_URI environment variable:
 
-var config = {
-    logger: { 
-        level: 'debug'
-    },
-    persistence: {
-        type: 'file'
-        path: 'settings.json'
-    }
-};
+```bash
+export ELASTIC_SEARCH_SERVICE_URI=https://CLUSTER_ID.REGION.PLATFORM.found.io:9243
+```
 
-var plugin = require('pip-services-settings-node').SettingsSenecaPlugin;
+To enable prometheus support please add or uncomment following line:
 
-seneca.use(plugin, config);
+ Example **config.yml** file:
+```
+# Prometheus accounts service
+- descriptor: "pip-services:metrics-service:prometheus:default:1.0"
 ```
 
 You can use the microservice by calling seneca commands directly as described in [Seneca Protocol](SenecaProtocolV1.md)

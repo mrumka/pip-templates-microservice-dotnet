@@ -70,11 +70,11 @@ To enable mongodb support in-memory persistence should be disabled and should be
 ```
 
 Where
-* collection - Mongo DB collection name
+* collection - MongoDB collection name. For more details see [MondoDB manual](https://docs.mongodb.com/manual/core/databases-and-collections/) also.
 * uri - ...
 * host - the IP Address or DNS name of the MongoDB server in the Network
 * port - the IP Port MongoDB server on the target System
-* database - the MongoDB database name
+* database - the MongoDB database name. For more details see [MondoDB manual](https://docs.mongodb.com/manual/core/databases-and-collections/) also.
 * username - the user name uses to access the database
 * password - the password uses to access the database
 
@@ -89,7 +89,7 @@ Example **config.yml** file:
 
 ```
 
-Where uri is Elactic Search connection string
+Where uri is Elactic Search destination address
 
 
 To enable prometheus support should be added or uncommented following line:

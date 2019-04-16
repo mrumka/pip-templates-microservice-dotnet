@@ -59,9 +59,9 @@ please, refer to documentation of the specific protocol.
 
 ## Run from Docker
 
-Install [Docker Desctop](https://www.docker.com/)
+**Step 1.** Install [Docker Desctop](https://www.docker.com/)
 
-Execute following command to download Docker image with predefined microservice and run
+**Step 2.** Execute following command to download Docker image with predefined microservice and run
 ```bash
 git docker run pip-templates-microservice-dotnet
 ```
@@ -73,14 +73,18 @@ Prerequisite:
 * Download and install [.Net Core SDK](https://dotnet.microsoft.com/download).
 * Download and install [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/) or [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/).
 
-Check it out latest source code directly from github repository
+**Step 1.** Check it out latest source code directly from github repository
 ```bash
 git clone git@github.com:pip-templates/pip-templates-microservice-dotnet.git
 ```
 
-Compile and run source code 
+**Step 2.** Compile source code 
 ```bash
 dotnet build ./pip-samples-beacons.sln
+```
+
+**Step 3** Run compuled binaries
+```bash
 cd ./src
 dotnet ./Process/bin/Debug/netcoreapp2.1/run.dll
 ```

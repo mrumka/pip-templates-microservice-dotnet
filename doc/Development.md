@@ -31,7 +31,6 @@ This document provides high-level instructions on how to build and test the micr
 Add config.yml file to the root of the microservice folder and set configuration parameters. As the starting point you can use example configuration from config.example.yml file.
 
 
-
 ## <a name="setup"></a> Environment Setup
 
 This is a .Net Core Framework project and you have to install .Net Core SDK.
@@ -69,6 +68,7 @@ git pull
 Check all configuration options. Specifically, pay attention to connection options
 for database and dependent microservices. For more information check [Configuration Guide](Configuration.md) 
 
+**Step 1.** Compile source code
 This microservice is written in C# language.
 So, if you make changes to the source code you need to compile it before running or committing to github.
 The process will output compiled files into /bin folder of each project in the solution.
@@ -76,7 +76,7 @@ The process will output compiled files into /bin folder of each project in the s
 ```bash
 dotnet build ./pip-samples-beacons.sln
 ```
-
+**Step 2.** Run compiled binaries
 After successful compulation all running binaries located in the Process/bin folder. 
 Use ./src as a working directory or copy **config.yml** to apropriate directory. 
 
@@ -87,17 +87,17 @@ dotnet ./Process/bin/Debug/netcoreapp2.1/run.dll
 
 ## <a name="build"></a> Building from Vusua Studio
 
-Open pip-samples-beacons.sln in the Visual Studio.
+**Step 1.** Open pip-samples-beacons.sln in the Visual Studio.
 
-Check that Process project selected as default project
+**Step 2.** Check that Process project selected as default project
 
-Click Run -> Run With -> Custom Configuration and set the Run in the directory with using full path to the solution src directory.
+**Step 3.** Click Run -> Run With -> Custom Configuration and set the Run in the directory with using full path to the solution src directory.
 
 or
 
-Copy microservice **config.yml** file from ./config/config.yml to the ./src/config/config.yml folder and set configuration parameters if needed.
+**Step 3.** Copy microservice **config.yml** file from ./config/config.yml to the ./src/config/config.yml folder and set configuration parameters if needed.
 
-Click Run -> Start Without Debigging menu
+**Step 4.** Click Run -> Start Without Debigging menu
 
 ## <a name="test"></a> Testing from Command Line
 
